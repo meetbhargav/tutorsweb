@@ -24,18 +24,29 @@ public class SimpleScript {
 		WebDriver driver = new ChromeDriver();
 		String url = "http://webdriveruniversity.com/index.html";
 		driver.manage().deleteAllCookies();
-		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-		Actions act = new Actions(driver);
 		driver.manage().window().maximize();
-
+		
 		driver.get(url);
+
+		// WebDriver Waits - Implicit Wait 
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+		
+		// WebDriver Wait - Explicit wait 
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		
+		//Action Class object for performing mouse actions
+		Actions act = new Actions(driver);
 
 		WebElement contactUsPage = driver.findElement(By.id("contact-us"));
 		System.out.println(contactUsPage.getText());
 		contactUsPage.click();
+		
+		// Switching between the web pages 
 
+		// getWindowHandle - store main window opened using browser
 		String MainWindow = driver.getWindowHandle();
+		
+		// getWindowHandles - stores the ids of all the windows opened in the browser
 		Set<String> windows1 = driver.getWindowHandles();
 
 		Iterator<String> i1 = windows1.iterator();
@@ -53,6 +64,7 @@ public class SimpleScript {
 			}
 		}
 		
+		// switchTo method is used to shift the control from child to main window
 		driver.switchTo().window(MainWindow);
 		WebElement loginPortal = driver.findElement(By.id("login-portal"));
 		System.out.println(loginPortal.getText());
@@ -97,11 +109,14 @@ public class SimpleScript {
 				driver.findElement(By.xpath("(//div[@class=\"modal-content\"])[1]//button[text()=\"Close\"]")).click();
 				
 				WebElement javaScriptButton = driver.findElement(By.cssSelector("span#button2"));
+				
+				// JavaScript Executor - Implementation for button click
 				JavascriptExecutor js = (JavascriptExecutor) driver;
 				js.executeScript("arguments[0].click();", javaScriptButton);
 				
 				driver.findElement(By.xpath("(//div[@class=\"modal-content\"])[2]//button[text()=\"Close\"]")).click();
 
+				//Implementation of the Explicit Wait
 				wait.until(ExpectedConditions.invisibilityOfElementLocated(
 					    By.xpath("(//div[@class='modal-content'])[2]//button[text()=\"Close\"]")
 					));
@@ -142,7 +157,10 @@ public class SimpleScript {
 			if(!MainWindow.equals(child_window)) {
 				driver.switchTo().window(child_window);
 				
+				
 				WebElement x = driver.findElement(By.cssSelector("input[placeholder=\"Add new todo\"]"));
+				
+				// Implementation of the Action Class
 				act.moveToElement(x).click()
 				.sendKeys("Play Games")
 				.sendKeys(Keys.ENTER)
